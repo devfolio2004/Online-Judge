@@ -60,10 +60,6 @@ const userSchema = new Schema(
     problemsSolved: {
       type: [String],
     },
-    image: {
-      type: String,
-      default: "This is the photo of the user.",
-    },
   },
   { timestamps: true },
 );
