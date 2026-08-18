@@ -68,6 +68,6 @@ const userSchema = new Schema(
   { timestamps: true },
 );
 
-const newModel = mongoose.model("Sanatize", newSchema);
+const userModel = mongoose.model("user", userSchema);
 
-export default newModel;
+export default userModel;
