@@ -70,3 +70,24 @@ export const login = async (req, res) => {
     res.status(400).json({ "Error: ": err.message });
   }
 };
+
+export const logout = async (req, res) => {
+  try {
+    const tokenName = req.token;
+    const payload = req.user;
+    const tokenHash = crypto
+      .createHash("sha256")
+      .update(tokenName)
+      .digest("hex");
+    const ttl = payload.exp - Math.floor(Date.now() / 1000);
+    await redisClient.set(`blockedToken:${tokenHash}`, "Blocked", { EX: ttl });
+    res.clearCookie("tokenName", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+    });
+    res.send("Logged out successfully!");
+  } catch (err) {
+    res.status(401).json({ "Error: ": err.message });
+  }
+};
