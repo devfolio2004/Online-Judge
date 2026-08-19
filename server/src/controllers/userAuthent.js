@@ -2,6 +2,8 @@ import userModel from "../models/user.js";
 import validate from "../utils/validate.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import redisClient from "../config/redis.js";
+import crypto from "node:crypto";
 
 export const register = async (req, res) => {
   try {
@@ -24,7 +26,7 @@ export const register = async (req, res) => {
     });
     //At the time of register only give an access token to the user:
     const accessToken = jwt.sign(
-      { id: user._id, email: email },
+      { _id: user._id, email: email },
       process.env.JWT_SECRET_KEY,
       { expiresIn: "20m" },
     );
@@ -55,7 +57,7 @@ export const login = async (req, res) => {
       throw new Error("Invalid Credentials!");
     }
     const accessToken = jwt.sign(
-      { id: userData._id, email: userData.email },
+      { _id: userData._id, email: userData.email },
       process.env.JWT_SECRET_KEY,
       { expiresIn: "20m" },
     );
