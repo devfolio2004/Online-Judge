@@ -26,7 +26,7 @@ export const register = async (req, res) => {
     });
     //At the time of register only give an access token to the user:
     const accessToken = jwt.sign(
-      { _id: user._id, email: email },
+      { _id: user._id, email: email, role: "user" },
       process.env.JWT_SECRET_KEY,
       { expiresIn: "20m" },
     );
@@ -57,7 +57,7 @@ export const login = async (req, res) => {
       throw new Error("Invalid Credentials!");
     }
     const accessToken = jwt.sign(
-      { _id: userData._id, email: userData.email },
+      { _id: userData._id, email: userData.email, role: userData.role },
       process.env.JWT_SECRET_KEY,
       { expiresIn: "20m" },
     );
@@ -89,5 +89,28 @@ export const logout = async (req, res) => {
     res.send("Logged out successfully!");
   } catch (err) {
     res.status(401).json({ "Error: ": err.message });
+  }
+};
+
+export const promoteToAdmin = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      throw new Error("Email is required");
+    }
+    const user = await userModel.findOne({ email });
+    if (!user) {
+      throw new Error("User not found");
+    }
+    if (user.role === "admin") {
+      throw new Error("User is already an admin");
+    }
+    user.role = "admin";
+    await user.save();
+    res.status(200).send(`${user.userName} is now an admin.`);
+  } catch (err) {
+    res.status(400).json({
+      "Error ": err.message,
+    });
   }
 };

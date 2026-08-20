@@ -3,15 +3,13 @@ import redisClient from "../config/redis.js";
 import crypto from "node:crypto";
 import "dotenv/config";
 
-const authMiddleware = async (req, res, next) => {
+const authUserMiddleware = async (req, res, next) => {
   try {
     const { tokenName } = req.cookies;
     if (!tokenName) {
       throw new Error("Unauthorized");
     }
     const payload = jwt.verify(tokenName, process.env.JWT_SECRET_KEY);
-    req.user = payload;
-    req.token = tokenName;
     const { _id } = payload;
     if (!_id) {
       throw new Error("Unauthorized");
@@ -24,10 +22,13 @@ const authMiddleware = async (req, res, next) => {
     if (isBlocked) {
       throw new Error("Unauthorized");
     }
+    req.user = payload;
+    req.token = tokenName;
     next();
   } catch (err) {
-    res.status(401).json({ "Error: ": err.message });
+    console.log(`Error:${err.message}`);
+    res.status(401).json({ "Error: ": "Unauthorized" });
   }
 };
 
-export default authMiddleware;
+export default authUserMiddleware;
