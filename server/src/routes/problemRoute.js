@@ -8,7 +8,7 @@ problemRouter.post("/create", authAdminMiddleware, createProblem);
 // problemRouter.get("/fetchall", authUserMiddleware, fetchAllProblems);
 // problemRouter.get("/fetch/:id", authUserMiddleware, fetchOneProblem);
 problemRouter.patch("/update/:id", authAdminMiddleware, updateProblem);
-// problemRouter.delete("/delete/:id", authAdminMiddleware, deleteProblem);
+problemRouter.delete("/delete/:id", authAdminMiddleware, deleteProblem);
 // problemRouter.get("/fetchProblems/user", authUserMiddleware, userProblems);
 
 export default problemRouter;

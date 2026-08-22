@@ -108,8 +108,24 @@ export const updateProblem = async (req, res) => {
       { ...req, body },
       { runValidators: true, new: true },
     );
-    res.status(400).send("Problem Updated Successfully!");
+    res.status(400).send(`Problem ${id} updated successfully!`);
   } catch (err) {
     res.status(404).json({ "Error: ": err.message });
+  }
+};
+
+export const deleteProblem = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      throw new Error("id is missing!");
+    }
+    const deletedProblem = await problemModel.findByIdAndDelete(id);
+    if (!deleteProblem) {
+      throw new Error("No such problem exists!");
+    }
+    res.send(`Problem ${id} deleted successfully!`);
+  } catch (err) {
+    res.status(201).json({ "Error: ": err.message });
   }
 };
