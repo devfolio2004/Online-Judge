@@ -7,6 +7,7 @@ import {
   updateProblem,
   deleteProblem,
   fetchOneProblem,
+  fetchAllProblems,
 } from "../controllers/problemControl.js";
 
 problemRouter.post("/create", authAdminMiddleware, createProblem);
