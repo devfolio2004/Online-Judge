@@ -1,52 +1,48 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
 
-const visibleTestCaseSchema = new Schema(
-  {
-    input: {
-      type: String,
-      required: true,
-    },
-    output: {
-      type: String,
-      required: true,
-    },
-    explanation: {
-      type: String,
-      required: true,
-    },
+const visibleTestCaseSchema = new Schema({
+  input: {
+    type: String,
+    required: true,
+    trim: true,
   },
-  
-);
+  output: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  explanation: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+});
 
-const hiddenTestCaseSchema = new Schema(
-  {
-    input: {
-      type: String,
-      required: true,
-    },
-    output: {
-      type: String,
-      required: true,
-    },
+const hiddenTestCaseSchema = new Schema({
+  input: {
+    type: String,
+    required: true,
+    trim: true,
   },
-  
-);
+  output: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+});
 
-const boilerPlateSchema = new Schema(
-  {
-    language: {
-      type: String,
-      required: true,
-      enum: ["C++", "Java", "JavaScript", "Python"],
-    },
-    initialCode: {
-      type: String,
-      required: true,
-    },
+const boilerPlateSchema = new Schema({
+  language: {
+    type: String,
+    required: true,
+    enum: ["C++", "Java", "JavaScript", "Python"],
   },
-  
-);
+  initialCode: {
+    type: String,
+    required: true,
+  },
+});
 
 const problemSchema = new Schema(
   {
@@ -101,10 +97,24 @@ const problemSchema = new Schema(
       ref: "user",
       required: true,
     },
+    editorialCode: [
+      {
+        language: {
+          type: String,
+          required: true,
+          enum: ["C++", "Java", "JavaScript", "Python"],
+        },
+        completeCode: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
   },
   {
     timestamps: true,
   },
 );
 
-export default problemSchema;
+const problemModel = mongoose.model("problem", problemSchema);
+export default problemModel;

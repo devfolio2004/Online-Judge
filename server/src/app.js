@@ -1,6 +1,7 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import authRouter from "./routes/userAuth.js";
+import problemRouter from "./routes/problemRoute.js";
 
 const app = express();
 
@@ -11,5 +12,7 @@ app.use(express.json());
 app.use(cookieParser());
 //Route for user authentication:
 app.use("/auth", authRouter);
+//Route for problems:
+app.use("/problems", problemRouter);
 
 export default app;
