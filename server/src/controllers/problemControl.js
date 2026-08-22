@@ -67,7 +67,7 @@ export const updateProblem = async (req, res) => {
       boilerPlate,
       editorialCode,
     } = req.body;
-    const id = req.params;
+    const { id } = req.params;
     if (!id) {
       throw new Error("id is missing!");
     }
