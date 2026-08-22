@@ -129,3 +129,19 @@ export const deleteProblem = async (req, res) => {
     res.status(201).json({ "Error: ": err.message });
   }
 };
+
+export const fetchOneProblem = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      throw new Error("id is missing!");
+    }
+    const fetchedProblem = await problemModel.findById(id);
+    if (!fetchedProblem) {
+      throw new Error("No such problem exists!");
+    }
+    res.send(fetchedProblem);
+  } catch (err) {
+    res.status(201).json({ "Error: ": err.message });
+  }
+};
