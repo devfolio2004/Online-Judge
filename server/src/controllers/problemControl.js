@@ -31,6 +31,9 @@ export const createProblem = async (req, res) => {
     }
     for (const { language, completeCode } of editorialCode) {
       const languageId = getLanguagebyId(language.toLowerCase());
+      if (!languageId) {
+        throw new Error("Unsupported language");
+      }
       const submissions = visibleTestCases.map(({ input, output }) => ({
         source_code: completeCode,
         language_id: languageId,
@@ -105,7 +108,7 @@ export const updateProblem = async (req, res) => {
     }
     const updatedProblem = await problemModel.findByIdAndUpdate(
       id,
-      { ...req, body },
+      { ...req.body },
       { runValidators: true, new: true },
     );
     res.status(400).send(`Problem ${id} updated successfully!`);
@@ -156,7 +159,7 @@ export const fetchAllProblems = async (req, res) => {
     const [problems, totalProblems] = await Promise.all([
       problemModel
         .find()
-        .select("title difficulty tags problemCreator createdAt updatedAt")
+        .select("_id title difficulty tags problemCreator")
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit)

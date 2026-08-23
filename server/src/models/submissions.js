@@ -54,7 +54,6 @@ const submissionSchema = new Schema(
     testCasesPassed: {
       type: Number,
       default: 0,
-      required: true,
       min: 0,
     },
     totalTestCases: {

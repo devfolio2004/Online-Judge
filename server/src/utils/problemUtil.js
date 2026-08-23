@@ -28,12 +28,8 @@ export const submitBatch = async (submissions) => {
   };
 
   async function fetchData() {
-    try {
-      const response = await axios.request(options);
-      return response.data;
-    } catch (error) {
-      console.error(error);
-    }
+    const response = await axios.request(options);
+    return response.data;
   }
 
   const result = await fetchData();
