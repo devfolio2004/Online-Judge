@@ -8,6 +8,7 @@ import {
   deleteProblem,
   fetchOneProblem,
   fetchAllProblems,
+  userProblems,
 } from "../controllers/problemControl.js";
 
 problemRouter.post("/create", authAdminMiddleware, createProblem);
@@ -15,6 +16,10 @@ problemRouter.get("/fetchall", authUserMiddleware, fetchAllProblems);
 problemRouter.get("/fetch/:id", authUserMiddleware, fetchOneProblem);
 problemRouter.patch("/update/:id", authAdminMiddleware, updateProblem);
 problemRouter.delete("/delete/:id", authAdminMiddleware, deleteProblem);
-// problemRouter.get("/fetchUserSolvedProblems/user", authUserMiddleware, userProblems);
+problemRouter.get(
+  "/fetchUserSolvedProblems/user",
+  authUserMiddleware,
+  userProblems,
+);
 
 export default problemRouter;
