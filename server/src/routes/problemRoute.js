@@ -11,7 +11,7 @@ import {
 } from "../controllers/problemControl.js";
 
 problemRouter.post("/create", authAdminMiddleware, createProblem);
-// problemRouter.get("/fetchall", authUserMiddleware, fetchAllProblems);
+problemRouter.get("/fetchall", authUserMiddleware, fetchAllProblems);
 problemRouter.get("/fetch/:id", authUserMiddleware, fetchOneProblem);
 problemRouter.patch("/update/:id", authAdminMiddleware, updateProblem);
 problemRouter.delete("/delete/:id", authAdminMiddleware, deleteProblem);
