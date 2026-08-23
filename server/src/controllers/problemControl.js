@@ -68,8 +68,8 @@ export const updateProblem = async (req, res) => {
       editorialCode,
     } = req.body;
     const { id } = req.params;
-    if (!id) {
-      throw new Error("id is missing!");
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new Error("Invalid problem ID");
     }
     const problemDocument = await problemModel.findById(id);
     if (!problemDocument) {
@@ -117,8 +117,8 @@ export const updateProblem = async (req, res) => {
 export const deleteProblem = async (req, res) => {
   try {
     const { id } = req.params;
-    if (!id) {
-      throw new Error("id is missing!");
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new Error("Invalid problem ID");
     }
     const deletedProblem = await problemModel.findByIdAndDelete(id);
     if (!deleteProblem) {
@@ -133,16 +133,18 @@ export const deleteProblem = async (req, res) => {
 export const fetchOneProblem = async (req, res) => {
   try {
     const { id } = req.params;
-    if (!id) {
-      throw new Error("id is missing!");
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new Error("Invalid problem ID");
     }
-    const fetchedProblem = await problemModel.findById(id);
+    const fetchedProblem = await problemModel
+      .findById(id)
+      .select("-hiddenTestCases -editorialCode");
     if (!fetchedProblem) {
-      throw new Error("No such problem exists!");
+      throw new Error("Problem not found");
     }
-    res.send(fetchedProblem);
+    res.status(200).json(fetchedProblem);
   } catch (err) {
-    res.status(201).json({ "Error: ": err.message });
+    res.status(400).json({ "Error: ": err.message });
   }
 };
 
