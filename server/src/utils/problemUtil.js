@@ -15,7 +15,7 @@ export const submitBatch = async (submissions) => {
     method: "POST",
     url: "https://judge0-ce.p.rapidapi.com/submissions/batch",
     params: {
-      base64_encoded: "true",
+      base64_encoded: "false",
     },
     headers: {
       "x-rapidapi-key": process.env.JUDGE0_API_KEY,
@@ -41,9 +41,9 @@ export const submitBatch = async (submissions) => {
 };
 
 const wait = (time) => {
-  setTimeout(() => {
-    return 1;
-  }, time);
+  return new Promise((resolve) => {
+    setTimeout(resolve, time);
+  });
 };
 
 export const submitTokens = async (tokenArray) => {
@@ -52,33 +52,31 @@ export const submitTokens = async (tokenArray) => {
     url: "https://judge0-ce.p.rapidapi.com/submissions/batch",
     params: {
       tokens: tokenArray.join(","),
-      base64_encoded: "true",
+      base64_encoded: "false",
       fields: "*",
     },
     headers: {
-      "x-rapidapi-key": "08c0361f98mshc3af568fe95c9cep1a4b9cjsn6ecac39b5f6c",
+      "x-rapidapi-key": process.env.JUDGE0_API_KEY,
       "x-rapidapi-host": "judge0-ce.p.rapidapi.com",
       "Content-Type": "application/json",
     },
   };
 
   async function fetchData() {
-    try {
-      const response = await axios.request(options);
-      return response.data;
-    } catch (error) {
-      console.error(error);
-    }
+    const response = await axios.request(options);
+    return response.data;
   }
 
-  const result = await fetchData();
-  const submissionArray = result.submissions;
-  while (true) {
+  const MAX_RETRIES = 20;
+
+  for (let retry = 0; retry < MAX_RETRIES; retry++) {
+    const result = await fetchData();
+    const submissionArray = result.submissions;
     const isNotReady = submissionArray.some(({ status_id }) => status_id <= 2);
-    if (isNotReady) {
-      await wait(1000);
-      continue;
+    if (!isNotReady) {
+      return submissionArray;
     }
-    return submissionArray;
+    await wait(500);
   }
+  throw new Error("Judge0 execution timed out");
 };
