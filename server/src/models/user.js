@@ -58,7 +58,12 @@ const userSchema = new Schema(
       max: 80,
     },
     problemsSolved: {
-      type: [String],
+      type: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "problem",
+        },
+      ],
     },
   },
   { timestamps: true },

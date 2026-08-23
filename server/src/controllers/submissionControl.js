@@ -6,6 +6,7 @@ import {
 } from "../utils/problemUtil.js";
 import { idToStatus, getJudgeError } from "../utils/submissionUtil.js";
 import submissionModel from "../models/submissions.js";
+import userModel from "../models/user.js";
 
 export const saveSubmission = async (req, res) => {
   try {
@@ -56,6 +57,11 @@ export const saveSubmission = async (req, res) => {
     }
     if (testCasesPassed === totalTestCases) {
       submissionDocument.status = "Accepted";
+      await userModel.findByIdAndUpdate(userId, {
+        $addToSet: {
+          problemsSolved: problemId,
+        },
+      });
     }
     submissionDocument.runtime = time;
     submissionDocument.memory = memory;
