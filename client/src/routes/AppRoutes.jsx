@@ -4,6 +4,8 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import ProtectedRoute from "./ProtectedRoute";
+import ProblemPage from "../pages/ProblemPage";
+
 
 function AppRoutes() {
     return (
@@ -16,12 +18,8 @@ function AppRoutes() {
                 <Route path="/" element={<Home />} />
 
                 <Route
-                    path="/problems/:id"
-                    element={
-                        <h1 className="p-8 text-2xl">
-                            Problem Page Coming Next
-                        </h1>
-                    }
+                  path="/problems/:id"
+                  element={<ProblemPage />}
                 />
             </Route>
 
