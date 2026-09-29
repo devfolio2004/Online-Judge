@@ -1,8 +1,12 @@
-import express from "express";
-const submissionRouter = express.Router();
-import authUserMiddleware from "../middleware/authUserMidlleware.js";
-import { saveSubmission } from "../controllers/submissionControl.js";
+import express from 'express';
 
-submissionRouter.post("/save/:id", authUserMiddleware, saveSubmission);
+import {getProblemSubmissions, saveSubmission,} from '../controllers/submissionControl.js';
+import authUserMiddleware from '../middleware/authUserMiddleware.js';
+
+const submissionRouter = express.Router();
+
+submissionRouter.post('/save/:id', authUserMiddleware, saveSubmission);
+
+submissionRouter.get('/problem/:id', authUserMiddleware, getProblemSubmissions);
 
 export default submissionRouter;

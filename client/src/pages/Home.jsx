@@ -108,11 +108,20 @@ function Home() {
                             {user?.role}
                         </span>
 
+                        {user?.role === "admin" && (
+                            <button
+                            onClick={() => navigate("/admin")}
+                            className="btn btn-secondary btn-sm"
+                            >
+                            Admin
+                            </button>
+                        )}
+
                         <button
                             onClick={handleLogout}
                             className="btn btn-error btn-sm"
                         >
-                            Logout
+                        Logout
                         </button>
                     </div>
                 </div>
